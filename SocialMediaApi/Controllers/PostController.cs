@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaCore.Interfaces;
 
@@ -14,10 +15,16 @@ namespace SocialMediaApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var posts =  _postRepository.GetPosts();
+            var posts =  await _postRepository.GetPosts();
             return Ok(posts);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var post =  await _postRepository.GetPost(id);
+            return Ok(post);
         }
     }
 }
