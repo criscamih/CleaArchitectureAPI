@@ -14,12 +14,12 @@ namespace SocialMediaInfrastructure.Data.Configurations
                 .HasName("PK__Comentar__DDBEFBF9D70A5CD8");
 
             builder.Property(c => c.IdComment)
-                .HasColumnName("IdComentario")
-                .ValueGeneratedNever();
+                .HasColumnName("IdComentario");
+                
 
             builder.Property(c => c.IdUser)
-                .HasColumnName("IdUsuario")
-                .ValueGeneratedNever();
+                .HasColumnName("IdUsuario");
+                
 
             builder.Property(c => c.IdPost)
                 .HasColumnName("IdPublicacion")

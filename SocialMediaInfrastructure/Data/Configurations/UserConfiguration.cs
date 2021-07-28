@@ -13,8 +13,7 @@ namespace SocialMediaInfrastructure.Data.Configurations
                     .HasName("PK__Usuario__5B65BF973DBDAE3F");
 
                 builder.Property(c => c.IdUser)
-                    .HasColumnName("IdUsuario")
-                    .ValueGeneratedNever();     
+                    .HasColumnName("IdUsuario");
 
                 builder.Property(e => e.Surnames)
                     .HasColumnName("Apellidos")

@@ -13,12 +13,10 @@ namespace SocialMediaInfrastructure.Data.Configurations
                     .HasName("PK__Publicac__24F1B7D3232C42B7");
 
                 builder.Property(c => c.IdPost)
-                    .HasColumnName("IdPublicacion")
-                    .ValueGeneratedNever();
+                    .HasColumnName("IdPublicacion");
 
                 builder.Property(c => c.IdUser)
-                    .HasColumnName("IdUsuario")
-                    .ValueGeneratedNever();
+                    .HasColumnName("IdUsuario");
 
                 builder.Property(e => e.Description)
                     .HasColumnName("Descripcion")
