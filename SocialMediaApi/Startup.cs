@@ -11,6 +11,7 @@ using SocialMediaCore.Interfaces;
 using SocialMediaInfrastructure.Data;
 using SocialMediaInfrastructure.Filters;
 using SocialMediaInfrastructure.Repositories;
+using SocialMediaCore.Services;
 
 namespace SocialMediaApi
 {
@@ -47,7 +48,9 @@ namespace SocialMediaApi
                 options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
                 options.LocalizationEnabled =false;
             });
+            services.AddScoped<IPostService,PostService>();
             services.AddScoped<IPostRepository,PostRepository>();
+            services.AddScoped<IUserRepository,UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
