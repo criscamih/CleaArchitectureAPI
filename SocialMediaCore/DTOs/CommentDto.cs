@@ -4,6 +4,7 @@ namespace SocialMediaCore.DTOs
 {
     public class CommentDto
     {
+        public int IdComment { get; set; }
         public int IdPost { get; set; }
         public int IdUser { get; set; }
         public string Description { get; set; }

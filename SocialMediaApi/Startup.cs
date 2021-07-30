@@ -1,5 +1,6 @@
 using System;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SocialMediaCore.Interfaces;
 using SocialMediaInfrastructure.Data;
+using SocialMediaInfrastructure.Filters;
 using SocialMediaInfrastructure.Repositories;
 
 namespace SocialMediaApi
@@ -31,6 +33,20 @@ namespace SocialMediaApi
             });
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
+            // .ConfigureApiBehaviorOptions(options => 
+            // {
+            //     options.SuppressModelStateInvalidFilter = true; el modelo se valida manualmente no por el ApiController
+            // });
+            services.AddMvc(
+            //     options => 
+            // {
+            //     options.Filters.Add<ValidationFilter>(); para validar el modelo manualmente
+            // }
+            ).AddFluentValidation(options =>
+            {
+                options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+                options.LocalizationEnabled =false;
+            });
             services.AddScoped<IPostRepository,PostRepository>();
         }
 

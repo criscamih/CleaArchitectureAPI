@@ -4,6 +4,7 @@ namespace SocialMediaCore.DTOs
 {
     public class UserDto
     {
+        public int IdUser { get; set; }
         public string Names { get; set; }
         public string Surnames { get; set; }
         public string Email { get; set; }
