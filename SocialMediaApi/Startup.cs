@@ -48,9 +48,11 @@ namespace SocialMediaApi
                 options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
                 options.LocalizationEnabled =false;
             });
-            services.AddScoped<IPostService,PostService>();
-            services.AddScoped<IPostRepository,PostRepository>();
-            services.AddScoped<IUserRepository,UserRepository>();
+            services.AddTransient<IPostService,PostService>();
+            // services.AddScoped<IPostRepository,PostRepository>();Fueron reemplazadas por el BaseRepository
+            // services.AddScoped<IUserRepository,UserRepository>();
+            services.AddTransient<IUnitOfWork,UnitOfWork>();
+            services.AddScoped(typeof(IBaseRepository<>),typeof(BaseRepository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

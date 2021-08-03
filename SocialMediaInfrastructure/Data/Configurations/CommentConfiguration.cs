@@ -10,10 +10,10 @@ namespace SocialMediaInfrastructure.Data.Configurations
         {
             builder.ToTable("Comentario");
 
-            builder.HasKey(e => e.IdComment)
+            builder.HasKey(e => e.Id)
                 .HasName("PK__Comentar__DDBEFBF9D70A5CD8");
 
-            builder.Property(c => c.IdComment)
+            builder.Property(c => c.Id)
                 .HasColumnName("IdComentario");
                 
 

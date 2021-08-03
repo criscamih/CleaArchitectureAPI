@@ -22,9 +22,9 @@ namespace SocialMediaApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            var posts =  await _PostService.GetPosts();
+            var posts =  _PostService.GetPosts();
             var postsDto = _mapper.Map<IEnumerable<PostDto>>(posts);
             var response = new Response<IEnumerable<PostDto>>(postsDto);
             return Ok(response);
@@ -53,7 +53,7 @@ namespace SocialMediaApi.Controllers
         public async Task<IActionResult> Post(int id, PostDto postdto)
         {
             var post = _mapper.Map<Post>(postdto);
-            post.IdPost = id;
+            post.Id = id;
             var result = await _PostService.UpdatePost(post);
             var psdto = _mapper.Map<PostDto>(post);
             var response = new Response<PostDto>(psdto);

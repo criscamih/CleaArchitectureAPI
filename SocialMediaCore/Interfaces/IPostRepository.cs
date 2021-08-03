@@ -4,13 +4,9 @@ using SocialMediaCore.Entities;
 
 namespace SocialMediaCore.Interfaces
 {
-   public interface IPostRepository
-   {
-      Task<IEnumerable<Post>> GetPosts();
-      Task<Post> GetPost(int idPost);
-      Task InsertPost(Post post);
-      Task<bool> UpdatePost(Post post);
-      Task<bool> DeletePost(int id);
+    public interface IPostRepository : IBaseRepository<Post>
+    {
+        Task<IEnumerable<Post>> GetPostsByIdUser(int IdUser);
 
-   }
+    }
 }

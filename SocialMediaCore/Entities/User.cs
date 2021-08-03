@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SocialMediaCore.Entities
 {
-    public partial class User
+    public partial class User : BaseEntity
     {
         public User()
         {
@@ -11,7 +11,6 @@ namespace SocialMediaCore.Entities
             Posts = new HashSet<Post>();
         }
 
-        public int IdUser { get; set; }
         public string Names { get; set; }
         public string Surnames { get; set; }
         public string Email { get; set; }
