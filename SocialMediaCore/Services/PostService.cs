@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SocialMediaCore.Entities;
+using SocialMediaCore.Exceptions;
 using SocialMediaCore.Interfaces;
 
 namespace SocialMediaCore.Services
@@ -32,10 +33,10 @@ namespace SocialMediaCore.Services
             // validar si el usuario existe en la base de datos.
             var user = await _repository.userRespository.GetById(post.IdUser);
             if (user is null)
-                throw new Exception("User Doesn't exist");
+                throw new BussinesException("User Doesn't exist");
             // validar que no se pueda usar la palabra sexo.
             if (post.Description.Contains("sexo"))
-                throw new Exception("Content not allowed");
+                throw new BussinesException("Content not allowed");
             // si el usuario tiene menos de 10 post y el últimos post fue menos de 7 días no se puede publicar
             var posts = await _repository.postRespository.GetPostsByIdUser(post.IdUser);
             if (posts.Count() < 10)
@@ -43,7 +44,7 @@ namespace SocialMediaCore.Services
                var lastPost = posts.OrderByDescending(d => d.Date).FirstOrDefault();
                if ((DateTime.Now - lastPost.Date).TotalDays < 7)
                {
-                  throw new Exception("User is not allowed to publish a post!!");
+                  throw new BussinesException("User is not allowed to publish a post!!");
                }
             }
             await _repository.postRespository.Add(post);

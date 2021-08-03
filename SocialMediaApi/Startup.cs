@@ -33,7 +33,10 @@ namespace SocialMediaApi
                 options.UseSqlServer(Configuration.GetConnectionString("SqlServerBlog"));
             });
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddControllers();
+            services.AddControllers(options => 
+            {
+                options.Filters.Add<GlobalExceptionFilter>(); //Agrega excepciones controladas
+            });
             // .ConfigureApiBehaviorOptions(options => 
             // {
             //     options.SuppressModelStateInvalidFilter = true; el modelo se valida manualmente no por el ApiController
