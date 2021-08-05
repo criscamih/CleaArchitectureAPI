@@ -12,6 +12,10 @@ using SocialMediaInfrastructure.Data;
 using SocialMediaInfrastructure.Filters;
 using SocialMediaInfrastructure.Repositories;
 using SocialMediaCore.Services;
+using SocialMediaInfrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
+using SocialMediaInfrastructure.Services;
+using SocialMediaCore.CustomEntities;
 
 namespace SocialMediaApi
 {
@@ -41,12 +45,15 @@ namespace SocialMediaApi
             // {
             //     options.SuppressModelStateInvalidFilter = true; el modelo se valida manualmente no por el ApiController
             // });
+
+            services.Configure<PaginationOptions>(Configuration.GetSection("Pagination")); //acceder al appsettings
+            
             services.AddMvc(
             //     options => 
             // {
             //     options.Filters.Add<ValidationFilter>(); para validar el modelo manualmente
             // }
-            ).AddFluentValidation(options =>
+            ).AddFluentValidation(options => //evita utilizar data annotations en las validaciones
             {
                 options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
                 options.LocalizationEnabled =false;
@@ -56,6 +63,13 @@ namespace SocialMediaApi
             // services.AddScoped<IUserRepository,UserRepository>();
             services.AddTransient<IUnitOfWork,UnitOfWork>();
             services.AddScoped(typeof(IBaseRepository<>),typeof(BaseRepository<>));
+            services.AddSingleton<IUriService>( provider => 
+            {
+                var accessor = provider.GetRequiredService<IHttpContextAccessor>();
+                var request = accessor.HttpContext.Request;
+                var baseUri = string.Concat(request.Scheme,"://",request.Host.ToUriComponent());
+                return new UriService(baseUri);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

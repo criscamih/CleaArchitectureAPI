@@ -11,10 +11,10 @@ namespace SocialMediaCore.QueryFilters
         public int? PageNumber { get; set; }
         public int? PageSize { get; set; }
 
-        public PostQueryFilter()
-        {
-            PageNumber = PageNumber??1;
-            PageSize = PageSize??10;
-        }
+        // public PostQueryFilter()
+        // {
+        //     PageNumber = PageNumber??1;
+        //     PageSize = PageSize??10;
+        // }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using SocialMediaCore.CustomEntities;
 
 namespace SocialMediaApi.Responses
 {
@@ -10,5 +11,7 @@ namespace SocialMediaApi.Responses
       }
 
       public T Data { get; set; }
+
+      public PageMetadata meta { get; set; }
    }
 }

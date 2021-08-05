@@ -6,20 +6,26 @@ using SocialMediaCore.Exceptions;
 using SocialMediaCore.Interfaces;
 using SocialMediaCore.QueryFilters;
 using SocialMediaCore.CustomEntities;
+using Microsoft.Extensions.Options;
 
 namespace SocialMediaCore.Services
 {
     public class PostService : IPostService
     {
         private readonly IUnitOfWork _repository;
+        private readonly PaginationOptions _paginationOptions;
 
-        public PostService(IUnitOfWork repository)
+        public PostService(IUnitOfWork repository, IOptions<PaginationOptions> options)
         {
             _repository = repository;
+            _paginationOptions = options.Value;
         }
 
         public PagedList<Post> GetPosts(PostQueryFilter postFilter)
         {
+            // validar los campos del paginado
+            postFilter.PageNumber = postFilter.PageNumber is null ? _paginationOptions.DefaultPageNumber : postFilter.PageNumber;
+            postFilter.PageSize = postFilter.PageSize is null ? _paginationOptions.DefaulPageSize : postFilter.PageSize;
             // validar si alguno de los filtros viene nulo
             var posts = _repository.postRespository.GetAll();
             if(postFilter.IdUser != null)
