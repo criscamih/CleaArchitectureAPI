@@ -1,10 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SocialMediaCore.Entities;
 using SocialMediaCore.Exceptions;
 using SocialMediaCore.Interfaces;
+using SocialMediaCore.QueryFilters;
+using SocialMediaCore.CustomEntities;
 
 namespace SocialMediaCore.Services
 {
@@ -17,9 +18,20 @@ namespace SocialMediaCore.Services
             _repository = repository;
         }
 
-        public IEnumerable<Post> GetPosts()
+        public PagedList<Post> GetPosts(PostQueryFilter postFilter)
         {
-            return _repository.postRespository.GetAll();
+            // validar si alguno de los filtros viene nulo
+            var posts = _repository.postRespository.GetAll();
+            if(postFilter.IdUser != null)
+                posts = posts.Where(p => p.IdUser == postFilter.IdUser).ToList();
+            if(postFilter.Date != null)
+                posts = posts.Where(p => p.Date.ToShortDateString() == postFilter.Date?.ToShortDateString()).ToList();
+            if(!string.IsNullOrEmpty(postFilter.Description))
+                posts = posts.Where(p => p.Description.ToLower().Contains(postFilter.Description.ToLower())).ToList();
+            
+            var postPaginated = PagedList<Post>.CreateList(posts,(int)postFilter.PageNumber,(int)postFilter.PageSize);
+
+            return postPaginated;
         }
 
         public async Task<Post> GetPost(int idPost)

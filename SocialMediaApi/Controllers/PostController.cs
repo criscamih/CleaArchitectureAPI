@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SocialMediaApi.Responses;
 using SocialMediaCore.DTOs;
 using SocialMediaCore.Entities;
 using SocialMediaCore.Interfaces;
+using SocialMediaCore.QueryFilters;
 
 namespace SocialMediaApi.Controllers
 {
@@ -22,11 +25,24 @@ namespace SocialMediaApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult Get([FromQuery] PostQueryFilter postFilter)
         {
-            var posts =  _PostService.GetPosts();
+            var posts =  _PostService.GetPosts(postFilter);
             var postsDto = _mapper.Map<IEnumerable<PostDto>>(posts);
             var response = new Response<IEnumerable<PostDto>>(postsDto);
+
+            var metadata = new
+            {
+                posts.CurrentPage,
+                posts.PageSize,
+                posts.TotalPages,
+                posts.Count
+            };
+
+            Response.Headers.Add("x-pagination", JsonConvert.SerializeObject(metadata));
+
             return Ok(response);
         }
 
