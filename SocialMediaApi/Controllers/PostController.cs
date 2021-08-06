@@ -14,6 +14,7 @@ using SocialMediaInfrastructure.Interfaces;
 
 namespace SocialMediaApi.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class PostController : ControllerBase
@@ -29,12 +30,17 @@ namespace SocialMediaApi.Controllers
             _uriService = uriService;
         }
 
+        ///<summary>
+        /// Allows you to get all of the posts or filter by some attributes
+        ///</summary>
+        ///<param name="filters">Filter Search</param>
+        ///<returns>all posts</returns>
         [HttpGet(Name = nameof(Get))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type= typeof(Response<IEnumerable<PostDto>>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult Get([FromQuery] PostQueryFilter postFilter)
+        public IActionResult Get([FromQuery] PostQueryFilter filters)
         {
-            var posts =  _PostService.GetPosts(postFilter);
+            var posts =  _PostService.GetPosts(filters);
             var postsDto = _mapper.Map<IEnumerable<PostDto>>(posts);
 
             var metadata = new PageMetadata
@@ -47,8 +53,8 @@ namespace SocialMediaApi.Controllers
                 NextPageNumber = posts.NextPageNumber,
                 HasNextPage = posts.HasNextPage,
                 HasPreviousPage = posts.HasPreviousPage,
-                NextPageUrl = _uriService.GetPostPaginatorUrl(postFilter,Url.RouteUrl(nameof(Get))).ToString(),
-                PreviousPageUrl = _uriService.GetPostPaginatorUrl(postFilter,Url.RouteUrl(nameof(Get))).ToString()
+                NextPageUrl = _uriService.GetPostPaginatorUrl(filters,Url.RouteUrl(nameof(Get))).ToString(),
+                PreviousPageUrl = _uriService.GetPostPaginatorUrl(filters,Url.RouteUrl(nameof(Get))).ToString()
             };
 
             var response = new Response<IEnumerable<PostDto>>(postsDto)

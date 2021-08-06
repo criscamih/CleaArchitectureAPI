@@ -16,6 +16,9 @@ using SocialMediaInfrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using SocialMediaInfrastructure.Services;
 using SocialMediaCore.CustomEntities;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.IO;
 
 namespace SocialMediaApi
 {
@@ -47,6 +50,15 @@ namespace SocialMediaApi
             // });
 
             services.Configure<PaginationOptions>(Configuration.GetSection("Pagination")); //acceder al appsettings
+            
+            // ---------documentación API-------
+            services.AddSwaggerGen(doc => 
+            {
+                doc.SwaggerDoc("v1", new OpenApiInfo{Title = "Social Media API", Version = "v1"});
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                doc.IncludeXmlComments(xmlPath);
+            });
             
             services.AddMvc(
             //     options => 
@@ -81,6 +93,14 @@ namespace SocialMediaApi
             }
 
             app.UseHttpsRedirection();
+            
+            app.UseSwagger();
+            
+            app.UseSwaggerUI(options => 
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Social Media API");
+                options.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 
