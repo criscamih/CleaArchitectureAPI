@@ -19,6 +19,9 @@ using SocialMediaCore.CustomEntities;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.IO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace SocialMediaApi
 {
@@ -60,6 +63,26 @@ namespace SocialMediaApi
                 doc.IncludeXmlComments(xmlPath);
             });
             
+            // ------servicio de autenticación con JWT
+            services.AddAuthentication(options => 
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options => 
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true, //validar emisor
+                    ValidateAudience = true, 
+                    ValidateLifetime = true, //con tiempo de vida de token
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Authentication:Issuer"],
+                    ValidAudience = Configuration["Authentication:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Authentication:SecretKey"]))
+                };
+            });
+
             services.AddMvc(
             //     options => 
             // {
@@ -105,6 +128,8 @@ namespace SocialMediaApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

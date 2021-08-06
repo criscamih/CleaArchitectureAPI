@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SocialMediaApi.Responses;
@@ -14,6 +15,7 @@ using SocialMediaInfrastructure.Interfaces;
 
 namespace SocialMediaApi.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
@@ -29,12 +31,10 @@ namespace SocialMediaApi.Controllers
             _mapper = mapper;
             _uriService = uriService;
         }
-
+        
         ///<summary>
         /// Allows you to get all of the posts or filter by some attributes
         ///</summary>
-        ///<param name="filters">Filter Search</param>
-        ///<returns>all posts</returns>
         [HttpGet(Name = nameof(Get))]
         [ProducesResponseType((int)HttpStatusCode.OK, Type= typeof(Response<IEnumerable<PostDto>>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
